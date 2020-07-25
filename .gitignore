@@ -15,4 +15,9 @@
 vendor/
 
 .git/
+
 .vscode/
+
+dist/
+
+*.code-workspace 
