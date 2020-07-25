@@ -1,0 +1,40 @@
+{{if (ge .Usage .Limit)}}
+  <p class="danger">
+    You have reached your API usage limit. Please upgrade or contact support for more help.
+  </p>
+{{else if (gt .Usage .Warning)}}
+  <p class="warning">
+    You have used {{.Usage}} of {{.Limit}} API calls and are nearing your limit. Have you considered upgrading?
+  </p>
+{{else if (eq .Usage 0)}}
+  <p>
+    You haven't used the API yet! What are you waiting for?
+  </p>
+{{else}}
+  <p>
+    You have used {{.Usage}} of {{.Limit}} API calls.
+  </p>
+{{end}}
+
+{{define "widget"}}
+  <div class="widget">
+    {{template "widget-header" .Name}}
+    <span class="price">${{.Price}}</span>
+  </div>
+{{end}}
+
+{{define "widget-header"}}
+  <h3 class="name">{{.}}</h3>
+{{end}}
+
+{{range .Widgets}}
+  {{template "widget" .}}
+{{end}}
+
+
+{{range .Widgets}}
+  <div class="widget">
+    <h3 class="name">{{.Name}}</h3>
+    <span class="price">${{.Price}}</span>
+  </div>
+{{end}}
