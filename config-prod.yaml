@@ -1,4 +1,4 @@
-BaseUrl: http://localhost # 网站域名
-Port: 8082 # 端口
-LogFile: C:\Users\ren\go\src\leju.com\mlog\server\data\bbs-go.log # 日志文件
-MySqlUrl: root:root@tcp(localhost:3306)/bbsgo_db?charset=utf8mb4&parseTime=True&loc=Local
+BaseURL: http://localhost # 网站域名
+Port: 8080 # 端口
+LocalJiafuW: root:root@tcp(localhost:3306)/jiafu
+LocalJiafuR: root:root@tcp(localhost:3306)/jiafu

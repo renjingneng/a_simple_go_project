@@ -2,29 +2,30 @@ package core
 
 import (
 	"flag"
-	ioutil "io/ioutil"
+	"io/ioutil"
 
 	log "github.com/renjingneng/a_simple_go_project/lib/log"
 	yaml "gopkg.in/yaml.v2"
 )
 
-//Config dfdf
-var Config *ConfigT
+//Config is
+var Config *config
 
-//ConfigT dfdf
-type ConfigT struct {
-	Env      string
-	BaseUrl  string `yaml:"BaseUrl"`  // base url
-	Port     string `yaml:"Port"`     // 端口
-	LogFile  string `yaml:"LogFile"`  // 日志文件
-	MySqlUrl string `yaml:"MySqlUrl"` // 数据库连接地址
+//DatabaseMap is
+var DatabaseMap map[string]string
+
+type config struct {
+	Env         string
+	BaseURL     string `yaml:"BaseURL"`     // BaseURL
+	Port        string `yaml:"Port"`        // 端口
+	LocalJiafuW string `yaml:"LocalJiafuW"` // 数据库连接地址
+	LocalJiafuR string `yaml:"LocalJiafuR"` // 数据库连接地址
 }
 
-//LoadConfig dfdf
-func LoadConfig() {
+func loadConfig() {
 	var envFlag = flag.String("env", "normal", "请输入env参数!")
 	flag.Parse()
-	Config = &ConfigT{}
+	Config = &config{}
 	var filename string
 	if *envFlag == "prod" {
 		filename = "config-prod.yaml"
@@ -39,5 +40,10 @@ func LoadConfig() {
 		log.Error(err)
 	}
 	Config.Env = *envFlag
-
+	DatabaseMap = make(map[string]string)
+	DatabaseMap["LocalJiafuW"] = Config.LocalJiafuW
+	DatabaseMap["LocalJiafuR"] = Config.LocalJiafuR
+}
+func init() {
+	loadConfig()
 }

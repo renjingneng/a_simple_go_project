@@ -1,0 +1,34 @@
+package core
+
+import (
+	"database/sql"
+
+	//this is
+	_ "github.com/go-sql-driver/mysql"
+
+	core "github.com/renjingneng/a_simple_go_project/core"
+)
+
+var mysqlContainer map[string]*sql.DB
+
+//GetEntityFromMysqlContainer is
+func GetEntityFromMysqlContainer(database string, mode string) *sql.DB {
+	if database == "" || mode == "" {
+		return nil
+	}
+	dbname := database + mode
+	if db, ok := mysqlContainer[dbname]; ok {
+		return db
+	}
+	if db, err := sql.Open("mysql", core.DatabaseMap[dbname]); err != nil {
+		return nil
+	} else {
+		mysqlContainer[dbname] = db
+		return db
+	}
+}
+func init() {
+	if mysqlContainer == nil {
+		mysqlContainer = make(map[string]*sql.DB)
+	}
+}
