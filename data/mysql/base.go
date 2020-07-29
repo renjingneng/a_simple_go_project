@@ -4,29 +4,31 @@ import (
 	"database/sql"
 	"strings"
 
-	container "github.com/renjingneng/a_simple_go_project/core/container"
+	"github.com/renjingneng/a_simple_go_project/core/container"
 )
 
-//Base is
 type base struct {
 	Tablename string
 	Dbname    string
-	Dbptr     *sql.DB
+	DbptrW    *sql.DB
+	DbptrR    *sql.DB
 }
 
-//NewBase is
-func NewBase(Tablename string, Dbname string) *base {
+func NewBase(Dbname string) *base {
 	return &base{
-		Tablename: Tablename,
-		Dbname:    Dbname,
-		Dbptr:     container.GetEntityFromMysqlContainer("LocalJiafu", "W"),
+		Dbname: Dbname,
+		DbptrW: container.GetEntityFromMysqlContainer(Dbname, "W"),
+		DbptrR: container.GetEntityFromMysqlContainer(Dbname, "R"),
 	}
 }
 
-//FetchRow is
-func (db *Base) FetchRow(fields string, condition map[string]string) map[string]interface{} {
-	querySQL, values := db.BuildQuerySQL(condition, map[string]string{"limit": "0,1", "fields": fields})
-	stmt, err := db.Dbptr.Prepare(querySQL)
+func (b *base) SetTablename(tablename string) {
+	b.Tablename = tablename
+}
+
+func (b *base) FetchRow(fields string, condition map[string]string) map[string]interface{} {
+	querySQL, values := b.BuildQuerySQL(condition, map[string]string{"limit": "0,1", "fields": fields})
+	stmt, err := b.DbptrR.Prepare(querySQL)
 	if err != nil {
 		return nil
 	}
@@ -36,7 +38,7 @@ func (db *Base) FetchRow(fields string, condition map[string]string) map[string]
 		return nil
 	}
 	defer rows.Close()
-	result := db.FetchResult(rows)
+	result := b.FetchResult(rows)
 	if len(result) > 0 {
 		return result[0]
 	} else {
@@ -45,8 +47,7 @@ func (db *Base) FetchRow(fields string, condition map[string]string) map[string]
 
 }
 
-//BuildQuerySQL is
-func (db *Base) BuildQuerySQL(condition map[string]string, other map[string]string) (string, []interface{}) {
+func (b *base) BuildQuerySQL(condition map[string]string, other map[string]string) (string, []interface{}) {
 	if _, ok := other["fields"]; !ok {
 		other["fields"] = "*"
 	}
@@ -65,14 +66,13 @@ func (db *Base) BuildQuerySQL(condition map[string]string, other map[string]stri
 	} else {
 		other["limit"] = " LIMIT " + other["limit"]
 	}
-	var where, values = db.BuildCondition(condition)
+	var where, values = b.BuildCondition(condition)
 
-	querySQL := "SELECT " + other["fields"] + " FROM " + db.Tablename + " WHERE " + where + other["group"] + other["order"] + other["limit"]
+	querySQL := "SELECT " + other["fields"] + " FROM " + b.Tablename + " WHERE " + where + other["group"] + other["order"] + other["limit"]
 	return querySQL, values
 }
 
-//BuildCondition is
-func (db *Base) BuildCondition(condition map[string]string) (string, []interface{}) {
+func (b *base) BuildCondition(condition map[string]string) (string, []interface{}) {
 	var where string = " 1"
 	var values []interface{}
 	for k, v := range condition {
@@ -89,8 +89,7 @@ func (db *Base) BuildCondition(condition map[string]string) (string, []interface
 	return where, values
 }
 
-//FetchResult is
-func (db *Base) FetchResult(rows *sql.Rows) []map[string]interface{} {
+func (b *base) FetchResult(rows *sql.Rows) []map[string]interface{} {
 
 	var result []map[string]interface{}
 	//获取记录列

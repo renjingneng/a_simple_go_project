@@ -17,7 +17,7 @@ vendor/
 .git/
 
 .vscode/
-
+.idea/
 dist/
 
 *.code-workspace 

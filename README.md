@@ -1,3 +1,8 @@
+# project description 
+data jiafu
+model news /article , author
+controller admin / news / article , author
+controller api / news / article , author
 # file structure
 ren                         
 ├─ core                     

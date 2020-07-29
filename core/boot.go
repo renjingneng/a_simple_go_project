@@ -28,11 +28,11 @@ func loadConfig() {
 	Config = &config{}
 	var filename string
 	if *envFlag == "prod" {
-		filename = "config-prod.yaml"
+		filename = "config/config-prod.yaml"
 	} else if *envFlag == "dev" {
-		filename = "config-dev.yaml"
+		filename = "config/config-dev.yaml"
 	} else {
-		filename = "config.yaml"
+		filename = "config/config.yaml"
 	}
 	if yamlFile, err := ioutil.ReadFile(filename); err != nil {
 		log.Error(err)
