@@ -15,11 +15,12 @@ var Config *config
 var DatabaseMap map[string]string
 
 type config struct {
-	Env         string
-	BaseURL     string `yaml:"BaseURL"`     // BaseURL
-	Port        string `yaml:"Port"`        // 端口
-	LocalJiafuW string `yaml:"LocalJiafuW"` // 数据库连接地址
-	LocalJiafuR string `yaml:"LocalJiafuR"` // 数据库连接地址
+	Env              string
+	BaseURL          string `yaml:"BaseURL"`          // BaseURL
+	Port             string `yaml:"Port"`             // 端口
+	LocalJiafuW      string `yaml:"LocalJiafuW"`      // 数据库连接地址
+	LocalJiafuR      string `yaml:"LocalJiafuR"`      // 数据库连接地址
+	LocalRedisSingle string `yaml:"LocalRedisSingle"` // 缓存地址
 }
 
 func loadConfig() {
@@ -43,6 +44,7 @@ func loadConfig() {
 	DatabaseMap = make(map[string]string)
 	DatabaseMap["LocalJiafuW"] = Config.LocalJiafuW
 	DatabaseMap["LocalJiafuR"] = Config.LocalJiafuR
+	DatabaseMap["LocalRedisSingle"] = Config.LocalRedisSingle
 }
 func init() {
 	loadConfig()

@@ -8,6 +8,6 @@ import (
 func main() {
 	article := news.NewArticle("china", "ren")
 	/****test start***/
-	fmt.Println(article.FetchLatest())
+	fmt.Println(article.FetchLocalCache())
 	/****test end***/
 }
