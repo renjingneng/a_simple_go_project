@@ -8,6 +8,6 @@ func NewBase(name string) *base {
 	a := &base{Name: name}
 	return a
 }
-func (a *base) FetchBase(length int) interface{} {
-	return length
+func (a *base) FetchName() string {
+	return a.Name
 }

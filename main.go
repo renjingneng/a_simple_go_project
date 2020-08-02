@@ -2,38 +2,25 @@ package main
 
 import (
 	"github.com/kataras/iris/v12"
-	"github.com/renjingneng/a_simple_go_project/lib/utility"
+	"github.com/kataras/iris/v12/mvc"
+	"github.com/renjingneng/a_simple_go_project/controller/admin/news"
+	_ "github.com/renjingneng/a_simple_go_project/core"
+	"github.com/renjingneng/a_simple_go_project/service"
 )
 
 func main() {
 	app := iris.New()
-
-	booksAPI := app.Party("/books")
-	{
-
-		// GET: http://localhost:8080/books
-		booksAPI.Get("/", list)
-	}
-
+	app.Get("/ping", pong)
+	mvc.Configure(app.Party("/api"), func(m *mvc.Application) {
+		// Register Dependencies.
+		m.Register(
+			service.NewGreetService,
+		)
+		m.Party("/news").Handle(new(news.ArticleController))
+	})
 	app.Listen(":8080")
 }
 
-// Book example.
-type Book struct {
-	Title string `json:"title"`
-}
-
-func list(ctx iris.Context) {
-	books := []Book{
-		{"Mastering Concurrency in Go"},
-		{"Go Design Patterns"},
-		{"Black Hat Go"},
-	}
-
-	utility.ApiFormatData(10005, books, ctx)
-	//ctx.JSON(books)
-	// TIP: negotiate the response between server's prioritizes
-	// and client's requirements, instead of ctx.JSON:
-	// ctx.Negotiation().JSON().MsgPack().Protobuf()
-	// ctx.Negotiate(books)
+func pong(ctx iris.Context) {
+	ctx.WriteString("pong")
 }

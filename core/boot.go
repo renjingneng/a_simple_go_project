@@ -4,7 +4,7 @@ import (
 	"flag"
 	"io/ioutil"
 
-	log "github.com/renjingneng/a_simple_go_project/lib/log"
+	"github.com/renjingneng/a_simple_go_project/lib/log"
 	yaml "gopkg.in/yaml.v2"
 )
 

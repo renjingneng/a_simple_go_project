@@ -5,7 +5,7 @@ import (
 	"github.com/renjingneng/a_simple_go_project/data/redis"
 )
 
-type article struct {
+type Article struct {
 	country          string
 	db               *mysql.Jiafu
 	localRedisClient *redis.Base
@@ -13,8 +13,8 @@ type article struct {
 	*base
 }
 
-func NewArticle(country string, name string) *article {
-	a := &article{
+func NewArticle(country string, name string) *Article {
+	a := &Article{
 		country:          country,
 		db:               mysql.NewJiafu(),
 		base:             NewBase(name),
@@ -23,14 +23,18 @@ func NewArticle(country string, name string) *article {
 
 	return a
 }
-func (a *article) FetchLatest() interface{} {
+func (a *Article) FetchLatest() interface{} {
 	a.db.SetTablename("author")
 	return a.db.FetchRow("first_name,last_name", map[string]string{"id": "27"})
 }
-func (a *article) FetchLocalCache() interface{} {
+func (a *Article) FetchLocalCache() interface{} {
 	if res, err := a.localRedisClient.Get("test123"); err != nil {
 		panic(err)
 	} else {
 		return res
 	}
+}
+
+func (a *Article) GetTitleByName(name string) string {
+	return "title is :" + name
 }
