@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/kataras/iris/v12"
 	"github.com/renjingneng/a_simple_go_project/core"
 )
 
@@ -10,7 +11,7 @@ type Greet interface {
 }
 
 // NewGreetService returns a service backed with a "db" based on "env".
-func NewGreetService() Greet {
+func NewGreetService(ctx iris.Context) Greet {
 	switch core.Config.Env {
 	case "prod":
 		return &greeter{"Hello"}
