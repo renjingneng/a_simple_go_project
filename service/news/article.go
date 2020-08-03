@@ -8,24 +8,23 @@ import (
 type Article struct {
 	country          string
 	db               *mysql.Jiafu
-	localRedisClient *redis.Base
+	localRedisClient *redis.Jiafu
 
-	*base
+	*Base
 }
 
 func NewArticle(country string, name string) *Article {
 	a := &Article{
 		country:          country,
 		db:               mysql.NewJiafu(),
-		base:             NewBase(name),
-		localRedisClient: redis.NewBase("LocalRedis", "Single"),
+		Base:             NewBase(name),
+		localRedisClient: redis.NewJiafu(),
 	}
-
 	return a
 }
-func (a *Article) FetchLatest() interface{} {
+func (a *Article) FetchAuthorById(id string) map[string]interface{} {
 	a.db.SetTablename("author")
-	return a.db.FetchRow("first_name,last_name", map[string]string{"id": "27"})
+	return a.db.FetchRow("first_name,last_name", map[string]string{"id": id})
 }
 func (a *Article) FetchLocalCache() interface{} {
 	if res, err := a.localRedisClient.Get("test123"); err != nil {

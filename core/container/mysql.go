@@ -6,7 +6,7 @@ import (
 	//this is
 	_ "github.com/go-sql-driver/mysql"
 
-	"github.com/renjingneng/a_simple_go_project/core"
+	"github.com/renjingneng/a_simple_go_project/core/config"
 )
 
 var mysqlContainer map[string]*sql.DB
@@ -20,10 +20,10 @@ func GetEntityFromMysqlContainer(database string, mode string) *sql.DB {
 	if db, ok := mysqlContainer[dbname]; ok {
 		return db
 	}
-	if _, ok := core.DatabaseMap[dbname]; !ok {
+	if _, ok := config.DatabaseMap[dbname]; !ok {
 		return nil
 	}
-	if db, err := sql.Open("mysql", core.DatabaseMap[dbname]); err != nil {
+	if db, err := sql.Open("mysql", config.DatabaseMap[dbname]); err != nil {
 		return nil
 	} else {
 		mysqlContainer[dbname] = db

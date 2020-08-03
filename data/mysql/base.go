@@ -7,26 +7,26 @@ import (
 	"github.com/renjingneng/a_simple_go_project/core/container"
 )
 
-type base struct {
+type Base struct {
 	Tablename string
 	Dbname    string
 	DbptrW    *sql.DB
 	DbptrR    *sql.DB
 }
 
-func NewBase(Dbname string) *base {
-	return &base{
+func NewBase(Dbname string) *Base {
+	return &Base{
 		Dbname: Dbname,
 		DbptrW: container.GetEntityFromMysqlContainer(Dbname, "W"),
 		DbptrR: container.GetEntityFromMysqlContainer(Dbname, "R"),
 	}
 }
 
-func (b *base) SetTablename(tablename string) {
+func (b *Base) SetTablename(tablename string) {
 	b.Tablename = tablename
 }
 
-func (b *base) FetchRow(fields string, condition map[string]string) map[string]interface{} {
+func (b *Base) FetchRow(fields string, condition map[string]string) map[string]interface{} {
 	querySQL, values := b.BuildQuerySQL(condition, map[string]string{"limit": "0,1", "fields": fields})
 	stmt, err := b.DbptrR.Prepare(querySQL)
 	if err != nil {
@@ -47,7 +47,7 @@ func (b *base) FetchRow(fields string, condition map[string]string) map[string]i
 
 }
 
-func (b *base) BuildQuerySQL(condition map[string]string, other map[string]string) (string, []interface{}) {
+func (b *Base) BuildQuerySQL(condition map[string]string, other map[string]string) (string, []interface{}) {
 	if _, ok := other["fields"]; !ok {
 		other["fields"] = "*"
 	}
@@ -72,7 +72,7 @@ func (b *base) BuildQuerySQL(condition map[string]string, other map[string]strin
 	return querySQL, values
 }
 
-func (b *base) BuildCondition(condition map[string]string) (string, []interface{}) {
+func (b *Base) BuildCondition(condition map[string]string) (string, []interface{}) {
 	var where string = " 1"
 	var values []interface{}
 	for k, v := range condition {
@@ -89,7 +89,7 @@ func (b *base) BuildCondition(condition map[string]string) (string, []interface{
 	return where, values
 }
 
-func (b *base) FetchResult(rows *sql.Rows) []map[string]interface{} {
+func (b *Base) FetchResult(rows *sql.Rows) []map[string]interface{} {
 
 	var result []map[string]interface{}
 	//获取记录列
