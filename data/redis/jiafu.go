@@ -1,7 +1,7 @@
 package redis
 
 type Jiafu struct {
-	*Base
+	Base
 }
 
 func NewJiafu() *Jiafu {
