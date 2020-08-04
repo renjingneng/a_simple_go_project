@@ -1,7 +1,7 @@
 package log
 
 import (
-	logrus "github.com/sirupsen/logrus"
+	"github.com/sirupsen/logrus"
 )
 
 //Error 自己封装一层

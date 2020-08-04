@@ -1,51 +1,39 @@
 package core
 
 import (
-	"flag"
-	"io/ioutil"
+	iris "github.com/kataras/iris/v12"
+	"github.com/kataras/iris/v12/mvc"
 
-	"github.com/renjingneng/a_simple_go_project/lib/log"
-	yaml "gopkg.in/yaml.v2"
+	"github.com/renjingneng/a_simple_go_project/controller/admin/news"
+	"github.com/renjingneng/a_simple_go_project/core/config"
+	"github.com/renjingneng/a_simple_go_project/service"
 )
 
-//Config is
-var Config *config
-
-//DatabaseMap is
-var DatabaseMap map[string]string
-
-type config struct {
-	Env              string
-	BaseURL          string `yaml:"BaseURL"`          // BaseURL
-	Port             string `yaml:"Port"`             // 端口
-	LocalJiafuW      string `yaml:"LocalJiafuW"`      // 数据库连接地址
-	LocalJiafuR      string `yaml:"LocalJiafuR"`      // 数据库连接地址
-	LocalRedisSingle string `yaml:"LocalRedisSingle"` // 缓存地址
+func Boot() {
+	//load config
+	config.LoadConfig()
+	//create iris instance
+	app := iris.New()
+	app.Get("/ping", pong)
+	//attach mvc
+	attachMvc(app)
+	//run app
+	app.Listen(":8080")
 }
-
-func loadConfig() {
-	var envFlag = flag.String("env", "normal", "请输入env参数!")
-	flag.Parse()
-	Config = &config{}
-	var filename string
-	if *envFlag == "prod" {
-		filename = "config/config-prod.yaml"
-	} else if *envFlag == "dev" {
-		filename = "config/config-dev.yaml"
-	} else {
-		filename = "config/config.yaml"
-	}
-	if yamlFile, err := ioutil.ReadFile(filename); err != nil {
-		log.Error(err)
-	} else if err = yaml.Unmarshal(yamlFile, Config); err != nil {
-		log.Error(err)
-	}
-	Config.Env = *envFlag
-	DatabaseMap = make(map[string]string)
-	DatabaseMap["LocalJiafuW"] = Config.LocalJiafuW
-	DatabaseMap["LocalJiafuR"] = Config.LocalJiafuR
-	DatabaseMap["LocalRedisSingle"] = Config.LocalRedisSingle
+func pong(ctx iris.Context) {
+	ctx.WriteString("pong")
 }
-func init() {
-	loadConfig()
+func attachMvc(app *iris.Application) {
+	mvc.Configure(app.Party("/api"), func(m *mvc.Application) {
+		// Register Dependencies on api
+		m.Register(
+			service.NewGreetService,
+		)
+		mvcNews := m.Party("/news")
+		// Register Dependencies on news
+		/*mvcNews.Register(
+			service.NewGreetService,
+		)*/
+		mvcNews.Party("/article").Handle(new(news.ArticleController))
+	})
 }

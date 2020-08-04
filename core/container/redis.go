@@ -2,13 +2,14 @@ package container
 
 import (
 	redis "github.com/go-redis/redis/v8"
-	"github.com/renjingneng/a_simple_go_project/core"
+	"github.com/renjingneng/a_simple_go_project/core/config"
+	"strings"
 )
 
-var redisContainer map[string]*redis.Client
+var redisContainer map[string]interface{}
 
 //GetEntityFromRedisContainer is
-func GetEntityFromRedisContainer(database string, mode string) *redis.Client {
+func GetEntityFromRedisContainer(database string, mode string) interface{} {
 	if database == "" || mode == "" {
 		return nil
 	}
@@ -16,19 +17,35 @@ func GetEntityFromRedisContainer(database string, mode string) *redis.Client {
 	if db, ok := redisContainer[dbname]; ok {
 		return db
 	}
-	if _, ok := core.DatabaseMap[dbname]; !ok {
+	if _, ok := config.DatabaseMap[dbname]; !ok {
 		return nil
 	}
-	db := redis.NewClient(&redis.Options{
-		Addr:     core.DatabaseMap[dbname],
-		Password: "",
-		DB:       0,
-	})
+	var db interface{}
+	if mode == "Single" {
+		db = newClient(config.DatabaseMap[dbname])
+	} else if mode == "Cluster" {
+		addrs := strings.Split(config.DatabaseMap[dbname], ",")
+		db = newClusterClient(addrs)
+	}
 	redisContainer[dbname] = db
 	return db
 }
 func init() {
 	if redisContainer == nil {
-		redisContainer = make(map[string]*redis.Client)
+		redisContainer = make(map[string]interface{})
 	}
+}
+func newClient(addr string) *redis.Client {
+	db := redis.NewClient(&redis.Options{
+		Addr:     addr,
+		Password: "",
+		DB:       0,
+	})
+	return db
+}
+func newClusterClient(addrs []string) *redis.ClusterClient {
+	db := redis.NewClusterClient(&redis.ClusterOptions{
+		Addrs: addrs,
+	})
+	return db
 }

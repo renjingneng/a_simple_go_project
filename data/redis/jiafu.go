@@ -1,4 +1,4 @@
-package mysql
+package redis
 
 type Jiafu struct {
 	*Base
@@ -6,7 +6,7 @@ type Jiafu struct {
 
 func NewJiafu() *Jiafu {
 	return &Jiafu{
-		Base: NewBase("MysqlJiafu"),
+		Base: NewBase("RedisJiafu", "Single"),
 	}
 }
 

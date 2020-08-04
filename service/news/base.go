@@ -1,13 +1,13 @@
 package news
 
-type base struct {
+type Base struct {
 	Name string
 }
 
-func NewBase(name string) *base {
-	a := &base{Name: name}
+func NewBase(name string) *Base {
+	a := &Base{Name: name}
 	return a
 }
-func (a *base) FetchName() string {
+func (a *Base) FetchName() string {
 	return a.Name
 }
