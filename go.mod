@@ -17,6 +17,8 @@ require (
 	github.com/nats-io/nkeys v0.2.0 // indirect
 	github.com/sirupsen/logrus v1.6.0
 	github.com/smartystreets/goconvey v1.6.4 // indirect
+	github.com/tidwall/gjson v1.6.0 // indirect
+	github.com/tidwall/sjson v1.1.1 // indirect
 	github.com/yudai/pp v2.0.1+incompatible // indirect
 	go.opentelemetry.io/otel v0.10.0 // indirect
 	google.golang.org/appengine v1.6.6 // indirect

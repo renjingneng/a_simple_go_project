@@ -1,24 +1,28 @@
-# project description 
-data jiafu
-model news /article , author
-controller admin / news / article , author
-controller api / news / article , author
+# project stats
+![Renjingneng's github stats](https://github-readme-stats.vercel.app/api?username=renjingneng&show_icons=true&theme=radical&include_all_commits=true)
+# project description
+A simple go web application based on Iris framework .
 # file structure
 ren                         
+├─ config    
+├─ controller    
 ├─ core                     
-│  └─ boot.go               
-├─ dist                     
-│  ├─ dev                   
-│  │  ├─ config.yaml        
-│  │  └─ a_simple_go_project.exe           
-│  └─ prod                  
-│     ├─ config.yaml        
-│     └─ a_simple_go_project.exe           
+│  ├─ config                                
+│  └─ container   
+│  └─ boot.go                                 
+├─ data                      
+│  ├─ mysql                              
+│  └─ redis 
 ├─ lib                      
-│  ├─ log                   
-│  │  └─ log.go             
-│  └─ utility               
-│     └─ string.go          
+│  ├─ gophp                              
+│  └─ httplib 
+│  └─ log 
+│  └─ spew 
+│  └─ utility   
+├─ log
+├─ middleware 
+├─ model  
+├─ service           
 ├─ templates                
 │  ├─ commons               
 │  │  └─ message.html       
@@ -27,11 +31,9 @@ ren
 │  └─ projects              
 │     └─ project1           
 │        ├─ index.html      
-│        └─ login.html      
-├─ a_simple_go_project.exe  
-├─ build.sh      //unfinished           
-├─ config-dev.yaml          
-├─ config-prod.yaml         
+│        └─ login.html   
+├─ .gitignore    
+├─ build.sh                  
 ├─ go.mod                   
 ├─ go.sum                   
 ├─ main.go                  

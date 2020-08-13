@@ -1,6 +1,0 @@
-BaseURL: http://localhost # 网站域名
-Port: 8080 # 端口
-MysqlJiafuW: root:root@tcp(localhost:3306)/jiafu
-MysqlJiafuR: root:root@tcp(localhost:3306)/jiafu
-RedisJiafuSingle: localhost:6379
-RedisJiafuCluster: localhost:6379,localhost:6379,localhost:6379,localhost:6379,localhost:6379,localhost:6379
