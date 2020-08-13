@@ -18,6 +18,6 @@ vendor/
 
 .vscode/
 .idea/
-config/
-
+config/config-dev.yaml
+config/config-prod.yaml
 *.code-workspace 
