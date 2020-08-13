@@ -9,6 +9,7 @@ import (
 )
 
 func AttachMvc(app *iris.Application) {
+	//测试用的项目
 	mvc.Configure(app.Party("/admin"), func(m *mvc.Application) {
 		// Register Dependencies on api
 		m.Register(
@@ -21,6 +22,7 @@ func AttachMvc(app *iris.Application) {
 		)*/
 		mvcNews.Party("/article").Handle(new(news.ArticleController))
 	})
+	//人脸识别项目
 	mvc.Configure(app.Party("/identify"), func(m *mvc.Application) {
 		m.Party("/api").Handle(new(identify.ApiController))
 		m.Party("/h5").Handle(new(identify.H5Controller))

@@ -2,44 +2,66 @@ package config
 
 import (
 	"flag"
-	"github.com/renjingneng/a_simple_go_project/lib/log"
-	yaml "gopkg.in/yaml.v2"
+	"fmt"
 	"io/ioutil"
+	"strings"
+
+	yaml "gopkg.in/yaml.v2"
+
+	"github.com/renjingneng/a_simple_go_project/lib/log"
 )
 
-var Config *config
+//全局配置变量
+var Config map[string]string
 var DatabaseMap map[string]string
+var SensetimeWhitelist map[string]string
 
-type config struct {
-	Env              string
-	BaseURL          string `yaml:"BaseURL"`          // BaseURL
-	Port             string `yaml:"Port"`             // 端口
-	MysqlJiafuW      string `yaml:"MysqlJiafuW"`      // 嘉福mysql写数据库
-	MysqlJiafuR      string `yaml:"MysqlJiafuR"`      // 嘉福mysql读数据库
-	RedisJiafuSingle string `yaml:"RedisJiafuSingle"` // 嘉福redis单机实例
-}
-
+// LoadConfig 载入配置,第一版配置变量Config等用struct类型，不太灵活，第二版改成了map类型，比较灵活
+//
+// @Author  renjingneng
+//
+// @CreateTime  2020/8/13 18:42
 func LoadConfig() {
+	//初始化变量
 	var envFlag = flag.String("env", "dev", "请输入env参数,默认值为dev!")
-	var filename string
-
 	flag.Parse()
-	Config = &config{}
+	var filename string
+	Config = make(map[string]string)
+	DatabaseMap = make(map[string]string)
+	SensetimeWhitelist = make(map[string]string)
+	yamlMap := make(map[interface{}]interface{})
 	if *envFlag == "prod" {
 		filename = "config/config-prod.yaml"
 	} else if *envFlag == "dev" {
 		filename = "config/config-dev.yaml"
 	} else {
+		*envFlag = "dev"
 		filename = "config/config-dev.yaml"
 	}
 	if yamlFile, err := ioutil.ReadFile(filename); err != nil {
 		log.Error(err)
-	} else if err = yaml.Unmarshal(yamlFile, Config); err != nil {
+	} else if err = yaml.Unmarshal(yamlFile, &yamlMap); err != nil {
 		log.Error(err)
 	}
-	Config.Env = *envFlag
-	DatabaseMap = make(map[string]string)
-	DatabaseMap["MysqlJiafuW"] = Config.MysqlJiafuW
-	DatabaseMap["MysqlJiafuR"] = Config.MysqlJiafuR
-	DatabaseMap["RedisJiafuSingle"] = Config.RedisJiafuSingle
+
+	//赋值配置变量
+	Config["Env"] = *envFlag
+	for key, value := range yamlMap {
+		keyStr := fmt.Sprint(key)
+		if strings.HasPrefix(keyStr, "Mysql") || strings.HasPrefix(keyStr, "Redis") {
+			DatabaseMap[keyStr] = fmt.Sprint(value)
+			continue
+		}
+		if keyStr == "SensetimeWhitelist" {
+			valueStr, _ := yamlMap[keyStr].(map[interface{}]interface{})
+			//valueStr,_:=m[keyStr].(map[string]string)
+			for key, value := range valueStr {
+				key := fmt.Sprint(key)
+				value := fmt.Sprint(value)
+				SensetimeWhitelist[key] = value
+			}
+			continue
+		}
+		Config[keyStr] = fmt.Sprint(value)
+	}
 }
