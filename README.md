@@ -3,6 +3,7 @@
 # project description
 A simple go web application based on Iris framework .
 # file structure
+```
 ren                         
 ├─ config    
 ├─ controller    
@@ -37,5 +38,6 @@ ren
 ├─ go.mod                   
 ├─ go.sum                   
 ├─ main.go                  
-└─ README.md                
+└─ README.md
+```           
            
