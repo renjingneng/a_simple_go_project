@@ -21,6 +21,7 @@ require (
 	github.com/tidwall/sjson v1.1.1
 	github.com/yudai/pp v2.0.1+incompatible // indirect
 	go.opentelemetry.io/otel v0.10.0 // indirect
+	golang.org/x/image v0.0.0-20200801110659-972c09e46d76
 	google.golang.org/appengine v1.6.6 // indirect
 	google.golang.org/grpc v1.31.0 // indirect
 	gopkg.in/yaml.v2 v2.3.0
