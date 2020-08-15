@@ -1,6 +1,7 @@
 package utility
 
 import (
+	"crypto/md5"
 	"fmt"
 	_ "golang.org/x/image/bmp"
 	_ "golang.org/x/image/tiff"
@@ -12,6 +13,7 @@ import (
 	"math/rand"
 	"mime/multipart"
 	"os"
+	"sort"
 	"time"
 
 	"github.com/renjingneng/a_simple_go_project/core/config"
@@ -72,4 +74,38 @@ func GenerateUploadPath(pathType string) string {
 // @CreateTime  2020/8/14 15:27
 func ImageConfig(r io.Reader) (image.Config, string, error) {
 	return image.DecodeConfig(r)
+}
+
+/**
+签名方法
+@author yongliang2@leju.com
+@return string
+*/
+func CreateSign(params map[string]string, token string) string {
+
+	// 因为map是无序的所以将所有的key拿到排序
+	keys := make([]string, len(params))
+	i := 0
+	for k, _ := range params {
+		keys[i] = k
+		i++
+	}
+	sort.Strings(keys)
+	str := ""
+	for _, v := range keys {
+		if str == "" {
+			str += v + "=" + params[v]
+		} else {
+			str += "&" + v + "=" + params[v]
+		}
+	}
+
+	// 参数拼接
+	new := str + token
+	// md5加密
+	has := md5.Sum([]byte(new))
+	// 转成换进制
+	md5str := fmt.Sprintf("%x", has)
+
+	return md5str
 }

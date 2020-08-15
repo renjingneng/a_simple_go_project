@@ -10,25 +10,21 @@ type H5Controller struct {
 }
 
 func (thisController *H5Controller) BeforeActivation(mvc mvc.BeforeActivation) {
-}
-func (thisController *H5Controller) GetLogin() {
-	//info := thisController.Ctx.Values().GetString("info")
-}
-func (thisController *H5Controller) GetIdentifyCard() {
 
 }
-func (thisController *H5Controller) GetCardFinished() {
+func (thisController *H5Controller) AfterActivation(mvc mvc.AfterActivation) {
 
 }
-func (thisController *H5Controller) GetIdentifyFace() {
+func (thisController *H5Controller) BeginRequest(ctx iris.Context) {
 
 }
-func (thisController *H5Controller) GetIdentifyFinished() {
+func (thisController *H5Controller) EndRequest(ctx iris.Context) {
 
 }
-func (thisController *H5Controller) GetInfo1() {
+
+/*func (thisController *H5Controller) MyCustomHandler() {
 
 }
-func (thisController *H5Controller) GetInfo2() {
+func (thisController *H5Controller) PostLogin() {
 
-}
+}*/

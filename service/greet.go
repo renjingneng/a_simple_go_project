@@ -12,7 +12,7 @@ type Greet interface {
 
 // NewGreetService is
 func NewGreetService(iris iris.Context) Greet {
-	switch config.Config.Env {
+	switch config.Config["Env"] {
 	case "prod":
 		return &greeter{"Hello"}
 	case "dev":
