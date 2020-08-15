@@ -4,6 +4,7 @@ import (
 	"github.com/kataras/iris/v12"
 	"github.com/kataras/iris/v12/mvc"
 	"github.com/renjingneng/a_simple_go_project/middleware"
+	"github.com/renjingneng/a_simple_go_project/model"
 )
 
 type ApiController struct {
@@ -18,18 +19,7 @@ func (thisController *ApiController) BeforeActivation(mvc mvc.BeforeActivation) 
 		middleware.CheckSign,
 	)
 }
-func (thisController *ApiController) AfterActivation(mvc mvc.AfterActivation) {
-
-}
-func (thisController *ApiController) BeginRequest(ctx iris.Context) {
-
-}
-func (thisController *ApiController) EndRequest(ctx iris.Context) {
-
-}
 func (thisController *ApiController) TokenHandler() {
-
-}
-func (thisController *ApiController) PostLogin() {
-
+	res := &model.ResponseSucc{Status: "succ", Info: "成功"}
+	thisController.Ctx.JSON(res)
 }

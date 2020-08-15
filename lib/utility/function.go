@@ -12,6 +12,7 @@ import (
 	"io"
 	"math/rand"
 	"mime/multipart"
+	"net/url"
 	"os"
 	"sort"
 	"time"
@@ -81,7 +82,7 @@ func ImageConfig(r io.Reader) (image.Config, string, error) {
 @author yongliang2@leju.com
 @return string
 */
-func CreateSign(params map[string]string, token string) string {
+func CreateSignWithoutUrlencode(params map[string]string, token string) string {
 
 	// 因为map是无序的所以将所有的key拿到排序
 	keys := make([]string, len(params))
@@ -99,6 +100,38 @@ func CreateSign(params map[string]string, token string) string {
 			str += "&" + v + "=" + params[v]
 		}
 	}
+
+	// 参数拼接
+	new := str + token
+	// md5加密
+	has := md5.Sum([]byte(new))
+	// 转成换进制
+	md5str := fmt.Sprintf("%x", has)
+
+	return md5str
+}
+func CreateSignWithUrlencode(params map[string]string, token string) string {
+
+	// 因为map是无序的所以将所有的key拿到排序
+	keys := make([]string, len(params))
+	i := 0
+	for k, _ := range params {
+		keys[i] = k
+		i++
+	}
+
+	// 创建url.Vaules结构体变量
+	u := url.Values{}
+
+	// 对字符串slice进行排序
+	sort.Strings(keys)
+
+	// 根据顺序获取参数
+	for _, k := range keys {
+		u.Add(k, params[k])
+	}
+	// 把参数URL Encode
+	str := u.Encode()
 
 	// 参数拼接
 	new := str + token

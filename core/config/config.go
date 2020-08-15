@@ -15,7 +15,8 @@ import (
 var Config map[string]string
 var DatabaseMap map[string]string
 var Hostlist map[string]string
-var SensetimeWhitelist map[string]string
+var IdentifyWhitelist map[string]string
+var Total map[string]map[string]string
 
 // LoadConfig 载入配置,第一版配置变量Config等用struct类型，不太灵活，第二版改成了map类型，比较灵活
 //
@@ -29,9 +30,11 @@ func LoadConfig() {
 	var filename string
 	Config = make(map[string]string)
 	DatabaseMap = make(map[string]string)
-	SensetimeWhitelist = make(map[string]string)
+	IdentifyWhitelist = make(map[string]string)
 	Hostlist = make(map[string]string)
+	Total = make(map[string]map[string]string)
 	yamlMap := make(map[interface{}]interface{})
+
 	if *envFlag == "prod" {
 		filename = "config/config-prod.yaml"
 	} else if *envFlag == "dev" {
@@ -54,13 +57,13 @@ func LoadConfig() {
 			DatabaseMap[keyStr] = fmt.Sprint(value)
 			continue
 		}
-		if keyStr == "SensetimeWhitelist" {
+		if keyStr == "IdentifyWhitelist" {
 			valueStr, _ := yamlMap[keyStr].(map[interface{}]interface{})
 			//valueStr,_:=m[keyStr].(map[string]string)  不能这么用，这样直接转换会有问题
 			for key, value := range valueStr {
 				key := fmt.Sprint(key)
 				value := fmt.Sprint(value)
-				SensetimeWhitelist[key] = value
+				IdentifyWhitelist[key] = value
 			}
 			continue
 		}
@@ -76,4 +79,8 @@ func LoadConfig() {
 		}
 		Config[keyStr] = fmt.Sprint(value)
 	}
+	Total["Config"] = Config
+	Total["DatabaseMap"] = DatabaseMap
+	Total["Hostlist"] = Hostlist
+	Total["IdentifyWhitelist"] = IdentifyWhitelist
 }
