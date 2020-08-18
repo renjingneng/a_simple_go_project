@@ -12,3 +12,15 @@ import (
 func main() {
 	core.Boot()
 }
+
+/*// test 测试用的
+//
+// @Author  renjingneng
+//
+// @CreateTime  2020/8/18 9:46
+func test() {
+	config.LoadConfig()
+	service := service.NewIdentify()
+	info,_:=service.GetInfoByToken("3bcda3cfd1f3b0f6d881dc2ec88d70ed")
+	spew.Dump(info)
+}*/

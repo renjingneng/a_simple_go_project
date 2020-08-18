@@ -7,6 +7,7 @@ require (
 	github.com/go-redis/redis/v8 v8.0.0-beta.7
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/gobwas/pool v0.2.1 // indirect
+	github.com/jinzhu/now v1.1.1
 	github.com/k0kubun/colorstring v0.0.0-20150214042306-9440f1994b88 // indirect
 	github.com/kataras/iris/v12 v12.1.9-0.20200803024604-6844be57ea3a
 	github.com/mattn/go-colorable v0.1.7 // indirect

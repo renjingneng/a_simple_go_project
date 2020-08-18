@@ -51,6 +51,8 @@ func CheckSign(ctx iris.Context) {
 	appsecret := whitelist[newData["appid"]]
 	newSign := utility.CreateSignWithUrlencode(newData, appsecret)
 	if newSign == sign {
+		ctx.Values().Set("appid", newData["appid"])
+		ctx.Values().Set("appsecret", appsecret)
 		ctx.Next()
 	} else {
 		res := &model.ResponseFail{Status: "fail", Reason: "非法访问-2！"}
